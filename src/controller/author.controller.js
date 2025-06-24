@@ -7,7 +7,7 @@ export const findBookAuthors = async (req, res) => {
         if (!book) {
             return res.status(404).json({error: "Book not found"});
         }
-        const authors = await book.getAuthors();
+        const authors = await book.getAuthors({transaction: t});
         const response = authors.map(author => ({
             name: author.name,
             birthDate: author.birthDate
@@ -30,7 +30,7 @@ export const removeAuthor = async (req, res) => {
             return res.status(404).json({ error: "Author not found" });
         }
 
-        await authorToDelete.destroy();
+        await authorToDelete.destroy({transaction: t});
 
         return res.json({ message: `Author '${author}' was deleted successfully` });
     }catch(err){
