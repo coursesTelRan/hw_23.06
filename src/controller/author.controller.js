@@ -20,3 +20,21 @@ export const findBookAuthors = async (req, res) => {
         })
     }
 }
+export const removeAuthor = async (req, res) => {
+    try{
+        const { author } = req.params;
+
+        const authorToDelete = await Author.findOne({ where: { name: author } });
+
+        if (!authorToDelete) {
+            return res.status(404).json({ error: "Author not found" });
+        }
+
+        await authorToDelete.destroy();
+
+        return res.json({ message: `Author '${author}' was deleted successfully` });
+    }catch(err){
+        console.error('Error remove author', err);
+        return res.status(500).json({ error: "Failed to delete author" });
+    }
+}
