@@ -1,4 +1,5 @@
 import {Author, Book} from "../model/index.js";
+import {sequelize} from "../config/database.js";
 
 export const findBookAuthors = async (req, res) => {
     try {
@@ -22,6 +23,7 @@ export const findBookAuthors = async (req, res) => {
 }
 export const removeAuthor = async (req, res) => {
     try{
+        const t = await sequelize.transaction();
         const { author } = req.params;
 
         const authorToDelete = await Author.findOne({transaction: t}, { where: { name: author } });
